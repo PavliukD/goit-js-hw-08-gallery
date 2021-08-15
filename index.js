@@ -4,6 +4,7 @@ const galleryEl = document.querySelector('.gallery')
 const ligthboxEl = document.querySelector('.lightbox')
 const closeBtnEl = document.querySelector('[data-action="close-lightbox"]')
 const ligthboxImageEl = document.querySelector('.lightbox__image')
+const ligthBoxOverlayEl = document.querySelector('.lightbox__overlay')
 
 function createElements(exportedImages) {
     return exportedImages.map(({ preview, original, description }) => {
@@ -28,7 +29,6 @@ function createElements(exportedImages) {
 galleryEl.innerHTML = createElements(exportedImages)
 
 galleryEl.addEventListener('click', toOpenModal)
-closeBtnEl.addEventListener('click', toCloseModal)
 
 function toOpenModal(event) {
     event.preventDefault()
@@ -38,12 +38,36 @@ function toOpenModal(event) {
 
     ligthboxEl.classList.add('is-open')
     ligthboxImageEl.src = event.target.dataset.source
+    document.addEventListener('keydown', onPressButton)
+    ligthBoxOverlayEl.addEventListener('click', toCloseModal)
+    closeBtnEl.addEventListener('click', toCloseModal)
+
 }
 
 function toCloseModal(event) {
+    document.removeEventListener('keydown', onPressButton)
     ligthboxEl.classList.remove('is-open')
-    ligthboxImageEl.src = "fui"
-    console.dir(ligthboxImageEl)
+    ligthboxImageEl.src = ""
 }
 
-console.log(KeyboardEvent.key)
+function onPressButton(event) {
+    if (event.code === 'Escape') {
+        toCloseModal()
+    } else
+        if (event.code === 'ArrowLeft') {
+            onLeftArrowPressed()
+        }
+        else
+            if (event.code === 'ArrowRight') {
+                onRightLeftPressed()
+            }
+}
+
+function onLeftArrowPressed(event) {
+    const currentImage = document.querySelector('img[src="' + ligthboxImageEl.src + '"')
+
+}
+
+function onRightLeftPressed(event) {
+    const currentImage = document.querySelector('img[src="' + ligthboxImageEl.src + '"')
+}
